@@ -1,0 +1,6 @@
+wheel
+aiogram
+loguru
+matplotlib
+peewee
+numpy
