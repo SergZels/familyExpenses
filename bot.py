@@ -13,7 +13,7 @@ from bd.bdnew import botBDnew
 from loguru import logger
 from aiogram.utils.executor import start_webhook
 
-TEST_MODE = True
+TEST_MODE = False
 
 ##------------------Блок ініціалізації-----------------##
 if TEST_MODE:
@@ -51,15 +51,13 @@ class MidlWare(BaseMiddleware):
             raise CancelHandler()
 
 ##-------------------handlers--------------------------------------##
-@dp.message_handler(commands=['start', 'help'],state= None)
+@dp.message_handler(commands=['start', 'help'], state= None)
 async def send_welcome(message: types.Message):
-
     await message.reply("Вітаю! Щоб розпочати натисніть кнопку внизу!", reply_markup=markup)
 
 ##--------------------------видатки-----------------------##
-@dp.message_handler(filters.Text(equals=["Продукти","Одяг","Подарунки","Красота","Дитині","Аптека","Інше"]),state=None)
-async def credet(message : types.Message, state: FSMContext):
-
+@dp.message_handler(filters.Text(equals=["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"]), state=None)
+async def credet(message: types.Message, state: FSMContext):
     await FSMzapCredet.cash.set()
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     async with state.proxy() as data:
@@ -67,7 +65,7 @@ async def credet(message : types.Message, state: FSMContext):
     logger.debug(f"Category - {message.text}")
     await message.answer("Напишіть суму:", reply_markup=ReplyKeyboardRemove())
 
-@dp.message_handler(content_types=[types.ContentType.TEXT],state=FSMzapCredet.cash)
+@dp.message_handler(content_types=[types.ContentType.TEXT], state=FSMzapCredet.cash)
 async def getcash(message: types.Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     if message.text.isdigit():
@@ -100,7 +98,6 @@ async def month_statistic(message : types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     te = botBDnew.statNew()
     doc = open('testplor.png', 'rb')
-    await message.answer(te)
     await message.reply_photo(doc)
 
 @dp.message_handler(filters.Text(equals="Минулий місяць"),state=None)
@@ -108,7 +105,6 @@ async def month_statistic(message : types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     te = botBDnew.statLastMounth()
     doc = open('testplor.png', 'rb')
-    await message.answer(te)
     await message.reply_photo(doc)
  
 ##----------------------------Різне----------------------##
