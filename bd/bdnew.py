@@ -23,7 +23,7 @@ class botBDnew():
         super().__init__(*args, **kwargs)
         db.create_tables([Credet])
 
-    def recCredet(self, category: str, cash: str, desc: str):
+    def recCredet(self, category: str, cash: str, desc : str):
         Credet.create(category=category, cash=cash, description=desc)
 
     def statNew() -> str:

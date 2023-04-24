@@ -29,7 +29,7 @@ botbdnew = botBDnew()
 logger.add("debug.txt")
 # webhook settings
 WEBHOOK_HOST = 'https://vmi957205.contaboserver.net'
-WEBHOOK_PATH = '/prod_orxmstat'
+WEBHOOK_PATH = '/prod_famstat'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
@@ -73,11 +73,16 @@ async def getcash(message: types.Message, state: FSMContext):
     if message.text.isdigit():
         async with state.proxy() as data:
             data['viruhka'] = message.text
-        logger.debug(f"Витрати - {message.text}")
-        await message.answer(f"Опишіть за що саме:")
-        await FSMzapCredet.next()
+            logger.debug(f"Витрати - {message.text}")
+            if data['category'] in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека"]:
+                botbdnew.recCredet(data['category'], data['viruhka'], data['category'])
+                await message.answer(f"Витрати за {data['category']} {data['viruhka']} грн. внесено!", reply_markup=markup)
+                await state.finish()
+            else:
+                await message.answer("Опишіть за що саме:")
+                await FSMzapCredet.next()
     else:
-        await message.answer(f"Напишіть число без грн")
+        await message.answer("Напишіть число без грн.")
 
 @dp.message_handler(content_types=[types.ContentType.TEXT],state=FSMzapCredet.description)
 async def description(message: types.Message, state: FSMContext):
@@ -86,7 +91,7 @@ async def description(message: types.Message, state: FSMContext):
         data['desr'] = message.text
     logger.debug(f"Опис - {message.text}")
     botbdnew.recCredet(data['category'], data['viruhka'], data["desr"])
-    await message.answer(f"Витрати {data['desr']} {data['viruhka']} внесено", reply_markup=markup)
+    await message.answer(f"Витрати за {data['desr']} {data['viruhka']} грн. внесено!", reply_markup=markup)
     await state.finish()
 
 ##----------------------Статистика------------------------##
