@@ -109,10 +109,10 @@ async def month_statistic(message: types.Message):
 @dp.message_handler(filters.Text(equals="Минулий місяць"), state=None)
 async def month_statistic(message: types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    te = botBDnew.statLastMounth()
-    doc = open('testplor.png', 'rb')
-    await message.answer(te)
-    await message.reply_photo(doc)
+    # te = botBDnew.statLastMounth()
+    # doc = open('testplor.png', 'rb')
+    await message.answer("Цей функціонал в розробці")
+    # await message.reply_photo(doc)
  
 ##----------------------------Різне----------------------##
 @dp.message_handler()
