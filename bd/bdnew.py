@@ -43,6 +43,8 @@ class botBDnew():
                 for i in Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month) & (Credet.category == categ)):
                     monthredet += int(i.cash)
                 cost.append(monthredet)
+                st+=f"{categ} - {monthredet} грн.\n"
 
         labels = "Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"
         diagramBuilder(labels, cost)
+        return st

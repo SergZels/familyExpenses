@@ -24,7 +24,7 @@ else:
 ADMIN_ID = conf.ADMIN_ID
 bot = Bot(token=API_Token)#os.getenv('TOKEN'))
 storage = MemoryStorage()
-dp = Dispatcher(bot,storage=storage)
+dp = Dispatcher(bot, storage=storage)
 botbdnew = botBDnew()
 logger.add("debug.txt")
 # webhook settings
@@ -74,7 +74,11 @@ async def getcash(message: types.Message, state: FSMContext):
             logger.debug(f"Витрати - {message.text}")
             if data['category'] in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека"]:
                 botbdnew.recCredet(data['category'], data['viruhka'], data['category'])
-                await message.answer(f"Витрати за {data['category']} {data['viruhka']} грн. внесено!", reply_markup=markup)
+                await bot.send_message(conf.ADMIN_ULIA, f"Витрати за {data['category']} {data['viruhka']} грн. внесено!",
+                                       reply_markup=markup)
+                await bot.send_message(conf.ADMIN_SERG, f"Витрати за {data['category']} {data['viruhka']} грн. внесено!",
+                                       reply_markup=markup)
+
                 await state.finish()
             else:
                 await message.answer("Опишіть за що саме:")
@@ -89,22 +93,25 @@ async def description(message: types.Message, state: FSMContext):
         data['desr'] = message.text
     logger.debug(f"Опис - {message.text}")
     botbdnew.recCredet(data['category'], data['viruhka'], data["desr"])
-    await message.answer(f"Витрати за {data['desr']} {data['viruhka']} грн. внесено!", reply_markup=markup)
+    await bot.send_message(conf.ADMIN_ULIA, f"Витрати за {data['desr']} {data['viruhka']} грн. внесено!", reply_markup=markup)
+    await bot.send_message(conf.ADMIN_SERG, f"Витрати за {data['desr']} {data['viruhka']} грн. внесено!", reply_markup=markup)
     await state.finish()
 
 ##----------------------Статистика------------------------##
-@dp.message_handler(filters.Text(equals="Статистика за місяць 📊"),state=None)
-async def month_statistic(message : types.Message):
+@dp.message_handler(filters.Text(equals="Статистика за місяць 📊"), state=None)
+async def month_statistic(message: types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     te = botBDnew.statNew()
     doc = open('testplor.png', 'rb')
+    await message.answer(te)
     await message.reply_photo(doc)
 
-@dp.message_handler(filters.Text(equals="Минулий місяць"),state=None)
-async def month_statistic(message : types.Message):
+@dp.message_handler(filters.Text(equals="Минулий місяць"), state=None)
+async def month_statistic(message: types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     te = botBDnew.statLastMounth()
     doc = open('testplor.png', 'rb')
+    await message.answer(te)
     await message.reply_photo(doc)
  
 ##----------------------------Різне----------------------##
@@ -116,11 +123,11 @@ async def echo(message : types.Message):
     elif message.text == "req":
         pass
     else:
-        await message.answer("Не розумію",reply_markup=markup)
+        await message.answer("Не розумію", reply_markup=markup)
     
 ##-------------------Запуск бота-------------------------##
 if TEST_MODE:
-    print("Bot running")
+    print("Bot running...")
     dp.middleware.setup(MidlWare())
     executor.start_polling(dp, skip_updates=True)
 else:
@@ -129,10 +136,11 @@ else:
         logger.debug("Бот запущено")
 
     async def on_shutdown(dp):
-        logger.debug('Зупиняюся..')
+        logger.debug('Зупиняюся...')
         await bot.delete_webhook()
         await dp.storage.close()
         await dp.storage.wait_closed()
+
     if __name__ == '__main__':
         dp.middleware.setup(MidlWare())
         start_webhook(
