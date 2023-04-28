@@ -6,7 +6,6 @@ from peewee import *
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "botBD.db")
 db = SqliteDatabase(db_path)
-
 def diagramBuilder(labels, sizes):
     fig, ax = plt.subplots()
     ax.pie(sizes, labels=labels, autopct='%1.1f%%')
@@ -32,7 +31,6 @@ class botBDnew():
         Credet.create(category=category, cash=cash, description=desc)
 
     def statNew():
-
         now = datetime.datetime.now()
         st = ""
         count = Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month)).count()

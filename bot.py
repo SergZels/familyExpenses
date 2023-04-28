@@ -123,7 +123,7 @@ async def echo(message : types.Message):
     elif message.text == "req":
         pass
     else:
-        await message.answer("Не розумію", reply_markup=markup)
+        await message.answer("Не розумію!", reply_markup=markup)
     
 ##-------------------Запуск бота-------------------------##
 if TEST_MODE:
@@ -133,10 +133,10 @@ if TEST_MODE:
 else:
     async def on_startup(dp):
         await bot.set_webhook(WEBHOOK_URL)
-        logger.debug("Бот запущено")
+        logger.debug("Бот запущено!")
 
     async def on_shutdown(dp):
-        logger.debug('Зупиняюся...')
+        logger.debug('Зупиняюся!')
         await bot.delete_webhook()
         await dp.storage.close()
         await dp.storage.wait_closed()
