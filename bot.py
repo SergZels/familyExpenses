@@ -111,7 +111,7 @@ async def month_statistic(message: types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
     # te = botBDnew.statLastMounth()
     # doc = open('testplor.png', 'rb')
-    await message.answer("Цей функціонал в розробці")
+    await message.answer("Вибачте, цей функціонал в розробці!")
     # await message.reply_photo(doc)
  
 ##----------------------------Різне----------------------##
