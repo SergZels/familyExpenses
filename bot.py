@@ -13,7 +13,7 @@ from bd.bdnew import botBDnew
 from loguru import logger
 from aiogram.utils.executor import start_webhook
 
-TEST_MODE = False
+TEST_MODE = True
 
 ##------------------Блок ініціалізації-----------------##
 if TEST_MODE:

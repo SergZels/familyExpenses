@@ -32,17 +32,20 @@ class botBDnew():
 
     def statNew():
         now = datetime.datetime.now()
-        st = ""
+        st = "Статистика:\n"
         count = Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month)).count()
         cost = []
+        labels = []
         if count > 0:
             for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"]:
                 monthredet = 0
                 for i in Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month) & (Credet.category == categ)):
                     monthredet += int(i.cash)
-                cost.append(monthredet)
+                if monthredet>0:
+                    cost.append(monthredet)
+                    labels.append(categ)
                 st+=f"{categ} - {monthredet} грн.\n"
 
-        labels = "Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"
+       # labels = "Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"
         diagramBuilder(labels, cost)
         return st
