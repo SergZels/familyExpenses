@@ -13,7 +13,7 @@ from bd.bdnew import botBDnew
 from loguru import logger
 from aiogram.utils.executor import start_webhook
 
-TEST_MODE = False
+TEST_MODE = True
 
 ##------------------Блок ініціалізації-----------------##
 if TEST_MODE:
@@ -59,7 +59,7 @@ async def send_welcome(message: types.Message):
     await message.reply("Вітаю! Щоб розпочати натисніть кнопку внизу!", reply_markup=markup)
 
 ##--------------------------видатки-----------------------##
-@dp.message_handler(filters.Text(equals=["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"]), state=None)
+@dp.message_handler(filters.Text(equals=["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство", "Інше"]), state=None)
 async def credet(message: types.Message, state: FSMContext):
     await FSMzapCredet.cash.set()
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
@@ -75,7 +75,7 @@ async def getcash(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['viruhka'] = message.text
             logger.debug(f"Витрати - {message.text}")
-            if data['category'] in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека"]:
+            if data['category'] in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство"]:
                 botbdnew.recCredet(data['category'], data['viruhka'], data['category'])
                 await bot.send_message(conf.ADMIN_ULIA, f"Витрати за {data['category']} {data['viruhka']} грн. внесено!",
                                        reply_markup=markup)

@@ -41,7 +41,7 @@ class botBDnew():
         cost = []
         labels = []
         if count > 0:
-            for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Інше"]:
+            for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство", "Інше"]:
                 monthredet = 0
                 for i in Credet.select().where((Credet.date.year == now.year) & (
                         Credet.date.month == now.month) & (Credet.category == categ)):
