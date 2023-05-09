@@ -59,6 +59,6 @@ class botBDnew():
                             st += f"{i.description} - {int(i.cash)}грн.\n"
 
         diagramBuilder(labels, cost)
-        st+= f"\nСередні витрати - {str(sum(cost)/now.day)}"
+        st+= f"\nСередні витрати - {str(round(sum(cost)/now.day))} грн. в день"
 
         return st
