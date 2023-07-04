@@ -116,19 +116,38 @@ async def month_statistic(message: types.Message):
 @dp.message_handler(filters.Text(equals="Минулий місяць"), state=None)
 async def month_statistic(message: types.Message):
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    # te = botBDnew.statLastMounth()
-    # doc = open('testplor.png', 'rb')
-    await message.answer("Вибачте, цей функціонал в розробці!")
-    # await message.reply_photo(doc)
- 
+    te = botBDnew.statLastMounth()
+    doc = open('testplor.png', 'rb')
+    await message.answer(te)
+    await message.reply_photo(doc)
+
+@dp.message_handler(filters.Text(equals="Рік"), state=None)
+async def month_statistic(message: types.Message):
+    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
+    te = botBDnew.MyYear()
+    doc = open('testplor.png', 'rb')
+    await message.answer(te)
+    await message.reply_photo(doc)
+
+# @dp.message_handler(filters.Text(equals="Сторінка"), state=None)
+# async def site(message: types.Message):
+#     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
+#     botbdnew.statHTML()
+#     await message.answer("<a href='https://vmi957205.contaboserver.net/famstat/statistic.html'>Натисни тут</a>", reply_markup=markup, parse_mode="HTML")
+
+
 ##----------------------------Різне----------------------##
 @dp.message_handler()
 async def echo(message : types.Message):
     if message.text == "Файл12":
         doc = open('debug.txt', 'rb')
         await message.reply_document(doc)
-    elif message.text == "req":
-        pass
+    elif message.text == "html":
+        await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
+        botbdnew.statHTML()
+        await message.answer("<a href='https://vmi957205.contaboserver.net/famstat/statistic.html'>Натисни тут</a>",
+                             reply_markup=markup, parse_mode="HTML")
+
     else:
         await message.answer("Не розумію!", reply_markup=markup)
     

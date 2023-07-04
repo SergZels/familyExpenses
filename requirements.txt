@@ -3,4 +3,4 @@ aiogram
 loguru
 matplotlib
 peewee
-
+jinja2
