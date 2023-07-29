@@ -35,74 +35,11 @@ class botBDnew():
     def recCredet(self, category: str, cash: str, desc: str):
         Credet.create(category=category, cash=cash, description=desc)
 
-    def statNew():
+    @staticmethod
+    def StatAllYear(year) -> str:
+        st = "Статистика за рік:\n"
         now = datetime.datetime.now()
-        st = "Статистика:\n"
-        count = Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month)).count()
-        cost = []
-        labels = []
-        if count > 0:
-            for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство", "Інше"]:
-                monthredet = 0
-                for i in Credet.select().where((Credet.date.year == now.year) & (
-                        Credet.date.month == now.month) & (Credet.category == categ)):
-                    monthredet += int(i.cash)
-
-                if monthredet > 0:
-                    cost.append(monthredet)
-                    labels.append(categ)
-                    st += f"{categ} - {monthredet} грн.\n"
-                    if categ == "Інше":
-                        st += "\nСклад іншого:\n"
-                        for i in Credet.select().where(
-                                (Credet.date.year == now.year) & (Credet.date.month == now.month) & (
-                                        Credet.category == categ)):
-                            st += f"{i.description} - {int(i.cash)}грн.\n"
-
-        diagramBuilder(labels, cost)
-        st+= f"\nСередні витрати - {str(round(sum(cost)/now.day))} грн. в день"
-
-        return st
-
-    def statLastMounth():
-        now = datetime.datetime.now()
-
-        month = now.month
-        if month > 1:
-            now = now.replace(month=now.month - 1)
-        else:
-            now = now.replace(month=12, year=now.year - 1)
-        st = "Статистика:\n"
-        count = Credet.select().where((Credet.date.year == now.year) & (Credet.date.month == now.month)).count()
-        cost = []
-        labels = []
-        if count > 0:
-            for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство",
-                          "Інше"]:
-                monthredet = 0
-                for i in Credet.select().where((Credet.date.year == now.year) & (
-                        Credet.date.month == now.month) & (Credet.category == categ)):
-                    monthredet += int(i.cash)
-
-                if monthredet > 0:
-                    cost.append(monthredet)
-                    labels.append(categ)
-                    st += f"{categ} - {monthredet} грн.\n"
-                    if categ == "Інше":
-                        st += "\nСклад іншого:\n"
-                        for i in Credet.select().where(
-                                (Credet.date.year == now.year) & (Credet.date.month == now.month) & (
-                                        Credet.category == categ)):
-                            st += f"{i.description} - {int(i.cash)}грн.\n"
-
-        diagramBuilder(labels, cost, monOrYear="минулий місяць")
-        st += f"\nСередні витрати - {str(round(sum(cost) / now.day))} грн. в день"
-
-        return st
-
-    def MyYear():
-        st = "Статистика:\n"
-        now = datetime.datetime.now()
+        now = now.replace(year=year)
         cost = []
         labels = []
         for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство",
@@ -118,13 +55,12 @@ class botBDnew():
 
         diagramBuilder(labels, cost, monOrYear="рік")
         day_count = Credet.select(fn.DATE_TRUNC('day', Credet.date)).where(
-            Credet.date.year == now.year
-        ).distinct().count()
+            Credet.date.year == now.year).distinct().count()
 
         st += f"\nСередні витрати - {str(round(sum(cost) / day_count))} грн. в день"
         return st
 
-
+    @staticmethod
     def statHTML(self):
         now = datetime.datetime.now()
 
@@ -143,3 +79,37 @@ class botBDnew():
 
             with open('statistic.html', 'w', encoding='utf-8') as file:
                 file.write(html_output)
+
+    @staticmethod
+    def statYearbyMonth(month,year) -> str:
+        now = datetime.datetime.now()
+       # now = now.replace(year, month)
+
+        st = f"Статистика за {month} місяць:\n"
+        count = Credet.select().where((Credet.date.year == year) & (Credet.date.month == month)).count()
+        cost = []
+        labels = []
+        if count > 0:
+            for categ in ["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство",
+                          "Інше"]:
+                monthredet = 0
+                for i in Credet.select().where((Credet.date.year == year) & (
+                        Credet.date.month == month) & (Credet.category == categ)):
+                    monthredet += int(i.cash)
+
+                if monthredet > 0:
+                    cost.append(monthredet)
+                    labels.append(categ)
+                    st += f"{categ} - {monthredet} грн.\n"
+                    if categ == "Інше":
+                        st += "\nСклад іншого:\n"
+                        for i in Credet.select().where(
+                                (Credet.date.year == year) & (Credet.date.month == month) & (
+                                        Credet.category == categ)):
+                            st += f"{i.description} - {int(i.cash)}грн.\n"
+
+            diagramBuilder(labels, cost, monOrYear=f"{month} місяць")
+            st += f"\nСередні витрати - {str(round(sum(cost) / now.day))} грн. в день"
+            return st
+        else:
+            return False

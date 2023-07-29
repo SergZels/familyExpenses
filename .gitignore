@@ -3,3 +3,5 @@ debug.txt
 *.png
 *.db
 *.bat
+venv
+.idea
