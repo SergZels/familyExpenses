@@ -1,6 +1,6 @@
 conf.py
 debug.txt
-*.png
+testplor.png
 *.db
 *.bat
 venv

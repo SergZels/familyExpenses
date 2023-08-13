@@ -68,13 +68,14 @@ async def send_welcome(message: types.Message):
 
 ##--------------------------видатки-----------------------##
 @dp.message_handler(filters.Text(
-    equals=["Продукти", "Одяг", "Подарунки", "Красота", "Дитині", "Аптека", "Хімія", "Господарство", "Інше"]),
+    equals=["Продукти🧀", "Одяг👗", "Подарунки🎁", "Красота👠", "Дитині👧", "Аптека💊", "Хімія🧴", "Господарство🏡", "Інше🧾"]),
                     state=None)
 async def credet(message: types.Message, state: FSMContext):
     await FSMzapCredet.cash.set()
     await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
+
     async with state.proxy() as data:
-        data['category'] = message.text
+        data['category'] = message.text[0:-1]
     logger.debug(f"Category - {message.text}")
     await message.answer("Напишіть суму:", reply_markup=ReplyKeyboardRemove())
 
